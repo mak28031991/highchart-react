@@ -15,3 +15,14 @@
 
 
 
+
+
+
+### Resources
+    * [Authentication using local storage](https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications)
+    * [Importing csv to mongodb](https://docs.mongodb.com/database-tools/mongoimport/)
+    * [HighChart - Chart Library](https://www.highcharts.com/demo)
+    * [HighChart - Sandbox](https://codesandbox.io/s/highcharts-react-simple-chart-forked-2bee6)
+
+
+
