@@ -3,8 +3,16 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+/**
+ * Routes of the backed
+ * Index Route - Default Route
+ * Login Route - Routes related to login
+ * Dashboard Route - Routes relates to dashboard
+ */
 var indexRouter = require("./routes/index");
 var loginRouter = require("./routes/login");
+var dashboardRouter = require("./routes/dashboard");
+
 const cors = require('cors');
 const PORT = process.env.PORT || 3001;
 var app = express();
@@ -22,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/login", loginRouter);
+app.use("/dashboard", dashboardRouter);
 
 var mongoose = require("mongoose");
 

@@ -6,18 +6,15 @@ import axios from "axios";
 export default class CovidGraph extends React.Component {
   constructor(props) {
     super(props);
-    //set the value of location, gender, age, status, fromDate, toDate received from parent component of Dashbaord 
+    //set the value of location, gender, age, fromDate, toDate received from parent component of Dashbaord 
     this.state = { 
         location: props.location, 
         gender:props.gender, 
         age: props.age, 
-        status:props.status,
-        fromDate: props.fromDate,
-        toDate: props.toDate,
-        options:this.getDefaultGraphOptions()
+        month: props.month,
+        options:this.getDefaultGraphOptions() // this is to render empty graph
     };
   }
-  
 
   /**
    * This method will be called when ever location, gender, age, status, fromDate, toDate 
@@ -26,27 +23,30 @@ export default class CovidGraph extends React.Component {
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
     if (this.newPropsReceived(prevProps)) {
-      this.setState({
-        location: this.props.location, 
-        gender: this.props.gender, 
-        age: this.props.age, 
-        status: this.props.status,
-        fromDate: this.props.fromDate,
-        toDate: this.props.toDate
-      });
-      axios
-      .get("https://60d79f5a307c300017a5f928.mockapi.io/graph")
-      .then((response) => {
-        // console.log(response.data);
-        const graphData = response.data.data;
-        var defaultOptions = this.getDefaultGraphOptions();
-        defaultOptions.xAxis.categories = graphData.xAxisData;
-        defaultOptions.series = graphData.seriesData;
-        console.log(defaultOptions);
         this.setState({
-            options: defaultOptions
+            location: this.props.location, 
+            gender: this.props.gender, 
+            age: this.props.age, 
+            month: this.props.month
         });
-      });
+        axios
+        .post("http://localhost:3001/dashboard/toll_summary/v1",{
+            location: this.props.location, 
+            gender: this.props.gender, 
+            age: this.props.age, 
+            month: this.props.month,
+        })
+        .then((response) => {
+            // console.log(response.data);
+            const graphData = response.data.data;
+            var defaultOptions = this.getDefaultGraphOptions();
+            defaultOptions.xAxis.categories = graphData.xAxisData;
+            defaultOptions.series = graphData.seriesData;
+            console.log(defaultOptions);
+            this.setState({
+                options: defaultOptions
+            });
+        });
     }
   }
 
