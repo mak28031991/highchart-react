@@ -13,13 +13,12 @@
    ```
 ### Backend & Front End
    * Start the backend and front end server
-   *
    ```shell script
    npm install
    npm start
    ```
 ## Dashboard Usage
-   * Dashboard canbe access at `http://localhost:3000/dashboard`.
+   * Dashboard can be accessed at `http://localhost:3000/dashboard`.
    * For first time access email and password will be prompted.
    * Use email as `test@opslyft.com` and password as `test123`.
 
