@@ -6,6 +6,6 @@ var dashboardController = require("../controller/dashboard");
 This API will be used to get toll summary.
 */
 router.post("/toll_summary/v1", dashboardController.getTollSummary);
-router.get("/states/v1", dashboardController.getStates);
+router.get("/monthly_cards/v1", dashboardController.getMonthlyCards);
 
 module.exports = router;

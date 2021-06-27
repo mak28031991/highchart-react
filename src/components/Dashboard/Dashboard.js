@@ -1,6 +1,7 @@
 import React from "react";
 import {Container,Row, Col, Button, Jumbotron , Form} from 'react-bootstrap';
 import '../../App.css';
+import axios from "axios";
 import CovidCard from "./CovidCard";
 import CovidGraph from "./CovidGraph";
 import DatePicker from "react-datepicker";
@@ -69,6 +70,9 @@ export default class Dashboard extends React.Component {
       ]
     }
   }
+  componentDidMount(){
+    this.updateMonthlyCards();
+  }
 
   handleStateChange = (event) => {
     console.log(event.target.value)
@@ -88,6 +92,18 @@ export default class Dashboard extends React.Component {
     this.setState({ month: month+"/"+year, selectedMonth:date });
   };
   
+  updateMonthlyCards() {
+    axios.get("http://localhost:3001/dashboard/monthly_cards/v1")
+      .then((response) => {
+        // console.log(response.data);
+        const cardData = response.data.data;
+        console.log(cardData);
+        this.setState({
+          cards: cardData
+        });
+      });
+  }
+
   render() {
     const {location, gender, age, month, selectedMonth, cards, states} = this.state;
     return (

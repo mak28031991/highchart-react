@@ -1,19 +1,55 @@
 var CovidStat = require("../model/covidstat");
 
-exports.getStates = function (req, res){
-    var uniqueStates = [];
-    CovidStat.find({},{}, {}, function(err, stats) {
-        stats.forEach(stat =>{
-            if(!uniqueStates.includes(stat["Detected State"])){
-                uniqueStates.push(stat["Detected State"]);
-            }
-        });
-        
+exports.getMonthlyCards = function (req, res){
+    var now = new Date();
+    var dateOfMonth = now.getDate()
+    var currMonth = (now.getMonth()+1).toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false})
+    var currYear = now.getFullYear()
+    var prevMonth = (currMonth-1).toLocaleString('en-US', {minimumIntegerDigits: 2,useGrouping: false});
+    var prevYear = currYear;
+    if(prevMonth==0){
+        prevMonth = 12;
+        prevYear = currYear-1;
+    } 
+    var currMonthActive = 0;
+    var prevMonthActive = 0;
+    var estimatedThisMonth = 0;
+    CovidStat.find({"Date Announced":{$regex:currMonth+"/"+currYear, "Current Status":"Hospitalized"}},{}, {}, function(err, stats) {
+        if(stats){
+            stats.forEach(stat =>{
+                currMonthActive +=1; 
+            });
+        }
     });
+    CovidStat.find(
+        {"Date Announced":{$regex:prevMonth+"/"+prevYear}, 
+        "Current Status":{$in:["Recovered","Deceased","Hospitalized"]}
+        },{}, {}, function(err, stats) {
+        if(stats){
+            stats.forEach(stat =>{
+                prevMonthActive +=1; 
+            });
+        }
+    });
+    estimatedThisMonth = (currMonthActive/dateOfMonth)*30;
+    console.log(currMonthActive);
+    console.log(prevMonthActive);
+    console.log(estimatedThisMonth);
     res.send({
         statusCode: 200,
         statusMessage: "States fetched successfully",
-        data:uniqueStates    
+        data:[{
+            cardTitle:"Month to Date Active Cases",
+            cardValue:currMonthActive
+          },
+          {
+            cardTitle:"Last Month Active Cases",
+            cardValue:prevMonthActive
+          },
+          {
+            cardTitle:"Estimated Month End Active Cases",
+            cardValue:estimatedThisMonth
+          }] 
     });
 }
 /**
