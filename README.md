@@ -11,12 +11,17 @@
    ``` shell script
    for i in *.csv; do mongoimport -d coviddb -c covidstats --type csv --file $i --headerline ; done
    ```
-### Backend Setup
-
-
-
-
-
+### Backend & Front End
+   * Start the backend and front end server
+   *
+   ```shell script
+   npm install
+   npm start
+   ```
+## Dashboard Usage
+   * Dashboard canbe access at `http://localhost:3000/dashboard`.
+   * For first time access email and password will be prompted.
+   * Use email as `test@opslyft.com` and password as `test123`.
 
 ### Resources
    * [Authentication using local storage](https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications)
