@@ -113,6 +113,14 @@ export default class Dashboard extends React.Component {
                 <Row>
                 <Col>
                   <Form.Group>
+                    <Form.Label>Select Month</Form.Label>
+                    <br/>
+                    <DatePicker selected={selectedMonth} onChange={this.handleMonthChange } dateFormat="MM/yyyy"
+      showMonthYearPicker />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group>
                     <Form.Label>State</Form.Label>
                     <Form.Control as="select" custom onChange={this.handleStateChange} >
                     <option value="">Select State</option>
@@ -159,14 +167,7 @@ export default class Dashboard extends React.Component {
                     </Form.Control>
                   </Form.Group>
                 </Col>
-                <Col>
-                  <Form.Group>
-                    <Form.Label>Month</Form.Label>
-                    <br/>
-                    <DatePicker selected={selectedMonth} onChange={this.handleMonthChange } dateFormat="MM/yyyy"
-      showMonthYearPicker />
-                  </Form.Group>
-                </Col>
+                
                 
                 </Row>
                 <Row>

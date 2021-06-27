@@ -72,44 +72,49 @@ exports.getTollSummary = function (req, res) {
     var hopsitalizedAray = [];
     var recoveredArray = [];
     console.log(param);
-    if(param.location!="" && param.gender != "" && param.age != "" && param.month!=""){
+    if(param.location!=""  && param.month!=""){
         //fire the query only when all params are obtained
         CovidStat.find(
             { 
                 "Detected State":param.location,
-                "Age Bracket": param.age,
-                "Gender": param.gender,
                 "Date Announced": { $regex:param.month}  
             },
             {}, {}, function(err, stats) {
-                
                 stats.forEach(stat =>{
                     var currDate = stat['Date Announced'];
-                    
-                    if(!uniqueueDates.includes(currDate)){
-                        uniqueueDates.push(currDate);
+                    var addCurrRow = true;
+                    if(param.age != "" && stat["Age Bracket"] != param.age){
+                        addCurrRow = false;
                     }
-                    
-                    if(stat["Current Status"] == "Recovered"){
-                        if(perDateRecovered.has(currDate)){
-                            var valTillNow = perDateRecovered.get(currDate);
-                            perDateRecovered.set(currDate,valTillNow+1);
-                        }else{
-                            perDateRecovered.set(currDate,1);
+                    if(param.gender != "" && stat["Gender"] != param.gender){
+                        addCurrRow = false;
+                    }
+                    if(addCurrRow){
+                        if(!uniqueueDates.includes(currDate)){
+                            uniqueueDates.push(currDate);
                         }
-                    }else if (stat["Current Status"] == "Hospitalized"){
-                        if(perDateHospitalized.has(currDate)){
-                            var valTillNow = perDateHospitalized.get(currDate);
-                            perDateHospitalized.set(currDate,valTillNow+1);
+                        
+                        if(stat["Current Status"] == "Recovered"){
+                            if(perDateRecovered.has(currDate)){
+                                var valTillNow = perDateRecovered.get(currDate);
+                                perDateRecovered.set(currDate,valTillNow+1);
+                            }else{
+                                perDateRecovered.set(currDate,1);
+                            }
+                        }else if (stat["Current Status"] == "Hospitalized"){
+                            if(perDateHospitalized.has(currDate)){
+                                var valTillNow = perDateHospitalized.get(currDate);
+                                perDateHospitalized.set(currDate,valTillNow+1);
+                            }else{
+                                perDateHospitalized.set(currDate,1);
+                            }
                         }else{
-                            perDateHospitalized.set(currDate,1);
-                        }
-                    }else{
-                        if(perDateDeceased.has(currDate)){
-                            var valTillNow = perDateDeceased.get(currDate);
-                            perDateDeceased.set(currDate,valTillNow+1);
-                        }else{
-                            perDateDeceased.set(currDate,1);
+                            if(perDateDeceased.has(currDate)){
+                                var valTillNow = perDateDeceased.get(currDate);
+                                perDateDeceased.set(currDate,valTillNow+1);
+                            }else{
+                                perDateDeceased.set(currDate,1);
+                            }
                         }
                     }
                 });
